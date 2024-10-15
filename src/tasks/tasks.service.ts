@@ -24,7 +24,7 @@ export class TasksService {
         if (search) {
             query.andWhere(
                 'task.title LIKE :search OR task.description LIKE :search',
-                { search: `%${search}%` }
+                { search: `%${search}%` },
             )
         }
 
@@ -37,7 +37,7 @@ export class TasksService {
         const task = this.taskRepository.create({
             title,
             description,
-            status: TaskStatus.OPEN
+            status: TaskStatus.OPEN,
         })
 
         await this.taskRepository.save(task)
@@ -45,7 +45,7 @@ export class TasksService {
     }
 
     async getTaskById(id: string): Promise<Task> {
-        const found = await this.taskRepository.findOne({where: { id }})
+        const found = await this.taskRepository.findOne({ where: { id } })
         if (!found) {
             throw new NotFoundException('Task not found: ', id)
         }
@@ -57,8 +57,7 @@ export class TasksService {
         const res = await this.taskRepository.delete(id)
         if (res.affected === 0) {
             throw new NotFoundException('Task not found: ', id)
-        }
-        else {
+        } else {
             return 'Task deleted: ' + id
         }
     }
